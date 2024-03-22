@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotEmpty;
 
+/*
 public class ItemResponse {
 
     @NotEmpty
@@ -25,6 +26,7 @@ public class ItemResponse {
     @NotEmpty
     @JsonProperty("quantity")
     private Integer quantity;
+    @JsonProperty("price")
     private Double price;
 
     public String getName() {
@@ -51,3 +53,6 @@ public class ItemResponse {
         this.price = price;
     }
 }
+
+
+ */

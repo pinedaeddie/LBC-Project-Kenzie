@@ -4,32 +4,60 @@ import java.util.Date;
 import java.util.List;
 
 public class Order {
-    private String orderId;
-    private Date orderDate;
-    private List<Item> orderItemList;
-    private double orderTotal;
 
+    private final String id;
+    private final String name;
+    private final Date orderDate;
+    private final List<Item> orderItems;
+    private final Integer quantity;
+    private final Double price;
+    private final Double orderTotal;
 
-    public Order(String orderId, Date orderDate, List<Item> orderItemList, double orderTotal) {
-        this.orderId = orderId;
+    public Order(String id, String name, Date orderDate, List<Item> orderItems, Integer quantity, Double price, Double orderTotal) {
+        this.id = id;
+        this.name = name;
         this.orderDate = orderDate;
-        this.orderItemList = orderItemList;
+        this.orderItems = orderItems;
+        this.quantity = quantity;
+        this.price = price;
         this.orderTotal = orderTotal;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Date getOrderDate() {
         return orderDate;
     }
 
-    public List<Item> getOrderItemList() {
-        return orderItemList;
+    public List<Item> getOrderItems() {
+        return orderItems;
     }
 
-    public double getOrderTotal() {
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Double getOrderTotal() {
         return orderTotal;
+    }
+
+
+
+    public double calculateOrderTotal() {
+        double total = 0.0;
+        for (Item item : orderItems) {
+            total += item.getPrice() * item.getQuantity();
+        }
+        return total;
     }
 }

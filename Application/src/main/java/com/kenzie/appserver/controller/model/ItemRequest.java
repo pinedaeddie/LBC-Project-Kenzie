@@ -1,9 +1,11 @@
 package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.models.auth.In;
 
 import javax.validation.constraints.NotEmpty;
 
+/*
 public class ItemRequest {
 
     @NotEmpty
@@ -12,6 +14,7 @@ public class ItemRequest {
     @NotEmpty
     @JsonProperty("quantity")
     private Integer quantity;
+    @JsonProperty("price")
     private Double price;
 
     public String getName() {
@@ -38,3 +41,5 @@ public class ItemRequest {
         this.price = price;
     }
 }
+
+ */
