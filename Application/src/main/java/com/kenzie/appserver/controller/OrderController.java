@@ -4,6 +4,7 @@ import com.kenzie.appserver.controller.model.ItemRequest;
 import com.kenzie.appserver.controller.model.OrderRequest;
 import com.kenzie.appserver.controller.model.OrderResponse;
 
+import com.kenzie.appserver.repositories.model.OrderRecord;
 import com.kenzie.appserver.service.OrderService;
 import com.kenzie.appserver.service.model.Item;
 import com.kenzie.appserver.service.model.Order;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @RestController
@@ -67,6 +69,16 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/all")
+    public ResponseEntity<List<Order>> findAll() {
+
+        try {
+            List<Order> order = orderService.findAll();
+            return ResponseEntity.ok(order);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/total/{orderId}")
     public ResponseEntity<Double> getOrderTotal(@PathVariable("orderId") String orderId) {
@@ -103,5 +115,17 @@ public class OrderController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+    @PostMapping("/placeOrder")
+    public ResponseEntity<OrderRecord> placeOrder (@RequestBody OrderRequest orderRequest){
+        OrderRecord record = new OrderRecord();
+        record.setName(orderRequest.getName());
+        record.setId(orderRequest.getId());
+        record.setOrderItems(orderRequest.getOrderItems());
+        record.setOrderDate(new Date());
+        record.setOrderTotal(orderRequest.getOrderTotal());
+        record.setQuantity(orderRequest.getQuantity());
+        orderService.placeOrder(record);
+        return ResponseEntity.ok(record);
     }
 }

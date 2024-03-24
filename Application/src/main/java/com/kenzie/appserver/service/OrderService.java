@@ -19,20 +19,18 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Order findById(String id) {
+    public List<Order> findAll() {
 
-        try {
-            Optional<OrderRecord> optionalOrderRecord = orderRepository.findById(id);
-            if (!optionalOrderRecord.isPresent()) {
-                throw new NoSuchElementException("Order with ID not found: " + id);
-            }
-            OrderRecord orderRecord = optionalOrderRecord.get();
-            Order order = new Order(orderRecord.getId(), orderRecord.getName(), new Date(),
-                    orderRecord.getOrderItems(), orderRecord.getQuantity(), orderRecord.getOrderTotal());
-            return order;
-        } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException("Product id is invalid: " + id);
+        List<Order> order = new ArrayList<>();
+        Iterable<OrderRecord> orderRecord = orderRepository.findAll();
+        if(!orderRecord.iterator().hasNext()){
+            throw new IllegalArgumentException("No Orders Found" );
         }
+        for (OrderRecord recordList : orderRecord){
+            Order newOrder = new Order(recordList.getId(), recordList.getName(), recordList.getOrderDate(), recordList.getOrderItems(), recordList.getQuantity(), recordList.getOrderTotal());
+            order.add(newOrder);
+        }
+        return order;
     }
 
     public void startOrder(Order order) {
@@ -131,5 +129,8 @@ public class OrderService {
         }
 
         throw new IllegalArgumentException("Item with id " + id + " not found in order.");
+    }
+    public void placeOrder(OrderRecord order){
+        orderRepository.save(order);
     }
 }
