@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.Item;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,21 +14,15 @@ public class OrderResponse {
     @NotEmpty
     @JsonProperty("orderId")
     private String orderId;
-
+    @NotEmpty
     @JsonProperty("itemName")
     private String itemName;
-    @NotEmpty
+    @NotNull
     @JsonProperty("quantity")
     private Integer quantity;
-
-    @JsonProperty("price")
-    private Double price;
-
+    @NotEmpty
     @JsonProperty("orderItems")
     private List<Item> orderItems;
-
-    @JsonProperty("orderTotal")
-    private Double orderTotal;
 
 
     public String getOrderId() {
@@ -54,27 +49,11 @@ public class OrderResponse {
         this.quantity = quantity;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public List<Item> getOrderItems() {
         return orderItems;
     }
 
     public void setOrderItems(List<Item> orderItems) {
         this.orderItems = orderItems;
-    }
-
-    public Double getOrderTotal() {
-        return orderTotal;
-    }
-
-    public void setOrderTotal(Double orderTotal) {
-        this.orderTotal = orderTotal;
     }
 }

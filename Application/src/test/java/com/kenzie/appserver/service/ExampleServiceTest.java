@@ -33,8 +33,8 @@ public class ExampleServiceTest {
         String id = randomUUID().toString();
 
         OrderRecord record = new OrderRecord();
-        record.setItemId(id);
-        record.setItemName("testName");
+        //record.setItemId(id);
+        //record.setItemName("testName");
 
         // WHEN
         when(orderRepository.findById(id)).thenReturn(Optional.of(record));

@@ -16,13 +16,14 @@ public class OrderRecord {
     private String name;
     private Date orderDate;
     private List<Item> orderItems;
-    private double itemCost;
+    private double orderTotal;
     private int quantity;
 
     @DynamoDBHashKey(attributeName = "id")
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -54,13 +55,13 @@ public class OrderRecord {
         this.orderItems = orderItems;
     }
 
-    @DynamoDBAttribute(attributeName = "ItemCost")
-    public double getItemCost() {
-        return itemCost;
+    @DynamoDBAttribute(attributeName = "OrderTotal")
+    public double getOrderTotal() {
+        return orderTotal;
     }
 
-    public void setItemCost(double itemCost) {
-        this.itemCost = itemCost;
+    public void setOrderTotal(double orderTotal) {
+        this.orderTotal = orderTotal;
     }
 
     @DynamoDBAttribute(attributeName = "quantity")
@@ -77,11 +78,11 @@ public class OrderRecord {
         if (this == o) return true;
         if (!(o instanceof OrderRecord)) return false;
         OrderRecord that = (OrderRecord) o;
-        return Double.compare(that.itemCost, itemCost) == 0 && quantity == that.quantity && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(orderDate, that.orderDate) && Objects.equals(orderItems, that.orderItems);
+        return Double.compare(that.orderTotal, orderTotal) == 0 && quantity == that.quantity && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(orderDate, that.orderDate) && Objects.equals(orderItems, that.orderItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, orderDate, orderItems, itemCost, quantity);
+        return Objects.hash(id, name, orderDate, orderItems, orderTotal, quantity);
     }
 }

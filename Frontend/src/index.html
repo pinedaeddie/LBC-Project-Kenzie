@@ -34,17 +34,28 @@
             <div class="form-section" id="addToCartSection">
                 <h3>Add Items to Cart</h3>
                 <form action="#">
-                    <label for="item">Item:</label>
-                    <input type="text" id="item" name="item" placeholder="required">
-                    <label for="Quantity">Quantity:</label>
-                    <select id="Quantity" name="Quantity" min="0" required>
-                        <option value="" disabled selected>Select</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                    <label for="Section">Section:</label>
+                    <select id="Section" name="Section" required>
+                        <option value="Select" disabled selected>Select</option>
+                        <option value="Veggies">Veggies</option>
+                        <option value="Fruits">Fruits</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Beverages">Beverages</option>
                     </select>
+
+                    <div id="itemSelection"></div>
+
+                    <div id="quantityContainer">
+                        <label for="Quantity">Quantity:</label>
+                        <select id="Quantity" name="Quantity" min="0" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
                     <button type="button" id="addToCartButton">Submit</button>
                 </form>
             </div>
@@ -56,7 +67,7 @@
                 <div class="input-box">
                     <span class="icon"><ion-icon name="mail"></ion-icon></span>
                     <input type="email" required>
-                    <label>"Enter your email"</label>
+                    <label>Enter your email</label>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>

@@ -1,21 +1,31 @@
 package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.models.auth.In;
-
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-/*
 public class ItemRequest {
 
     @NotEmpty
+    @JsonProperty("itemId")
+    private String itemId;
+    @NotNull
     @JsonProperty("name")
     private String name;
-    @NotEmpty
+    @NotNull
     @JsonProperty("quantity")
     private Integer quantity;
+    @NotNull
     @JsonProperty("price")
     private Double price;
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
 
     public String getName() {
         return name;
@@ -41,5 +51,3 @@ public class ItemRequest {
         this.price = price;
     }
 }
-
- */

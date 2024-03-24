@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.Item;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class OrderRequest {
@@ -12,20 +12,16 @@ public class OrderRequest {
     @NotEmpty
     @JsonProperty("id")
     private String id;
-    @NotEmpty
+    @NotNull
     @JsonProperty("name")
     private String name;
-    @NotEmpty
-    @JsonProperty("orderDate")
-    private Date orderDate;
-    @NotEmpty
+    @NotNull
     @JsonProperty("quantity")
     private Integer quantity;
     @NotEmpty
     @JsonProperty("orderItems")
     private List<Item> orderItems;
-    @JsonProperty("price")
-    private Double price;
+    @NotNull
     @JsonProperty("orderTotal")
     private Double orderTotal;
 
@@ -45,14 +41,6 @@ public class OrderRequest {
         this.name = name;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -67,14 +55,6 @@ public class OrderRequest {
 
     public void setOrderItems(List<Item> orderItems) {
         this.orderItems = orderItems;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public Double getOrderTotal() {
