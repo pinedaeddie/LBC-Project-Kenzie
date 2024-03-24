@@ -2,39 +2,89 @@
 <html>
 <head>
     <script type="text/javascript" src="examplePage.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
-<body class="background">
-    <header class="header" id="header">
-        <div class="site-title">
-            <a class="header_home" href="index.html">Example App</a>
-        </div>
+<body>
+
+    <header class="header">
+        <a href="#" class="logo"><ion-icon name="cart"></ion-icon>Shopping</a>
+        <nav class="nav">
+            <a class="active" href="#"><i class="fa fa-fw fa-home"></i> HOME</a>
+            <a href="#">ABOUT</a>
+            <a href="#">BEST SELLER</a>
+            <a href="#"><i class="fa fa-fw fa-envelope"></i> CONTACT</a>
+        </nav>
     </header>
-    <div class="card">
-        <h2>Create Example</h2>
-        <form class="card-content" id="create-form">
-            <p class="form-field">
-                <label>Name</label>
-                <input type="text" required class="validated-field" id="create-name-field">
-            </p>
-            <button type="submit">Create</button>
-        </form>
-    </div>
-    <div class="card">
-        <h2>Get By ID</h2>
-        <form class="card-content" id="get-by-id-form">
-            <p class="form-field">
-                <label>ID</label>
-                <input type="text" required class="validated-field" id="id-field">
-            </p>
-            <button type="submit">Get</button>
-        </form>
-    </div>
-    <div class="card" id="result">
-        <h2>Result:</h2>
-        <p id="result-info"></p>
-    </div>
+
+    <section class="home">
+        <div class="content">
+            <h2>Welcome to Online Grocery Shopping</h2>
+            <p>Connecting Your Amazing Products and Service to the Right Customer.. Choose Delicacy The Best Healthy Way to Life!</p>
+            <a href="#" id="getStartedButton">Get Started</a>
+            <a href="#">Learn More</a>
+
+            <div class="form-section" id="addToCartSection">
+                <h3>Add Items to Cart</h3>
+                <form action="#">
+                    <label for="Section">Section:</label>
+                    <select id="Section" name="Section" required>
+                        <option value="Select" disabled selected>Select</option>
+                        <option value="Veggies">Veggies</option>
+                        <option value="Fruits">Fruits</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Beverages">Beverages</option>
+                    </select>
+
+                    <div id="itemSelection"></div>
+
+                    <div id="quantityContainer">
+                        <label for="Quantity">Quantity:</label>
+                        <select id="Quantity" name="Quantity" min="0" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addToCartButton">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="wrapper-login">
+            <h2>Member Login</h2>
+            <form action="#">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" required>
+                    <label>Enter your email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" required>
+                    <label>Enter your password</label>
+                </div>
+                <div class="remember-forgot">
+                    <a href="#">Remember me</a>
+                    <a href="#">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <div class="register-link">
+                    <p>Not a member? <a href="#">Sign up now</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
 
 </body>
 </html>
