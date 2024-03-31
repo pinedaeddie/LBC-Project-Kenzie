@@ -8,16 +8,14 @@ public class Order {
     private final String id;
     private final String name;
     private final Date orderDate;
-    private final List<Item> orderItems;
-    private final Integer quantity;
+    private final List<String> items;
     private final Double orderTotal;
 
-    public Order(String id, String name, Date orderDate, List<Item> orderItems, Integer quantity, Double orderTotal) {
+    public Order(String id, String name, Date orderDate, List<String> orderItems, Double orderTotal) {
         this.id = id;
         this.name = name;
         this.orderDate = orderDate;
-        this.orderItems = orderItems;
-        this.quantity = quantity;
+        this.items = orderItems;
         this.orderTotal = orderTotal;
     }
 
@@ -33,15 +31,14 @@ public class Order {
         return orderDate;
     }
 
-    public List<Item> getOrderItems() {
-        return orderItems;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
+    public List<String> getOrderItems() {
+        return items;
     }
 
     public Double getOrderTotal() {
         return orderTotal;
     }
+
+
+
 }
