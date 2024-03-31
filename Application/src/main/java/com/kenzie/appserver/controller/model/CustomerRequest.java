@@ -7,42 +7,11 @@ import java.util.UUID;
 
 public class CustomerRequest {
     @NotNull
-    @JsonProperty("name")
-    private String name;
-//
-    public String getName() {
-        return name;
+    @JsonProperty("userName")
+    private String userName;
+
+    public String getUserName() {
+        return userName;
     }
 
 }
-//@NotNull
-//    @JsonProperty("quantity")
-//    private Integer quantity;
-//    @NotNull
-//    @JsonProperty("price")
-//    private Double price;
-
-//    public String getItemId() {
-//        return itemId;
-//    }
-//
-//    public String setItemId(String itemId) {
-//        return this.itemId = UUID.randomUUID().toString();
-//    }
-
-//    public Integer getQuantity() {
-//        return quantity;
-//    }
-//
-//    public void setQuantity(Integer quantity) {
-//        this.quantity = quantity;
-//    }
-//
-//    public Double getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(Double price) {
-//        this.price = price;
-//    }
-//}

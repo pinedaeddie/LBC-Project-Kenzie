@@ -158,6 +158,33 @@ const main = async () => {
             }
         });
     }
+
+    // Adding event listener to the "Submit" button in the "Add Items to Cart" section
+    const addToCartButton = document.getElementById('addToCartButton');
+    if (addToCartButton) {
+        addToCartButton.addEventListener('click', () => {
+            // Retrieving selected values
+            const section = document.getElementById('Section').value;
+            const item = document.getElementById('Item').value;
+            const quantity = document.getElementById('Quantity').value;
+
+            // Creating HTML to display the selected items
+            const selectedItemHTML = `
+                <div>
+                    <p>Section: ${section}</p>
+                    <p>Item: ${item}</p>
+                    <p>Quantity: ${quantity}</p>
+                </div>
+            `;
+
+            const selectedItemsContainer = document.getElementById('selectedItemsContainer');
+            if (selectedItemsContainer) {
+                selectedItemsContainer.innerHTML = '';
+                selectedItemsContainer.insertAdjacentHTML('beforeend', selectedItemHTML);
+                selectedItemsContainer.style.display = 'block';
+            }
+        });
+    }
 };
 
 window.addEventListener('DOMContentLoaded', main);

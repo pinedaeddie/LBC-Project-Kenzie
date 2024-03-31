@@ -6,16 +6,16 @@ import java.util.List;
 public class Order {
 
     private final String id;
-    private final String name;
+    private final String userName;
     private final Date orderDate;
     private final List<String> items;
     private final Double orderTotal;
 
-    public Order(String id, String name, Date orderDate, List<String> orderItems, Double orderTotal) {
+    public Order(String id, String userName, Date orderDate, List<String> items, Double orderTotal) {
         this.id = id;
-        this.name = name;
+        this.userName = userName;
         this.orderDate = orderDate;
-        this.items = orderItems;
+        this.items = items;
         this.orderTotal = orderTotal;
     }
 
@@ -23,22 +23,19 @@ public class Order {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     public Date getOrderDate() {
         return orderDate;
     }
 
-    public List<String> getOrderItems() {
+    public List<String> getItems() {
         return items;
     }
 
     public Double getOrderTotal() {
         return orderTotal;
     }
-
-
-
 }

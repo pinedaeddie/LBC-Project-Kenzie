@@ -6,43 +6,39 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.kenzie.appserver.service.model.Order;
 
 import java.util.List;
+import java.util.Objects;
 
 @DynamoDBTable(tableName = "Customers")
 public class CustomerRecord {
     private String id;
-    private String name;
-    private List<Order> completedOrders;
-    private List<Order> incompleteOrders;
-    @DynamoDBHashKey (attributeName = "id")
+    private String userName;
+
+    @DynamoDBHashKey(attributeName = "id")
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-    @DynamoDBAttribute(attributeName = "name")
-    public String getName() {
-        return name;
+
+    @DynamoDBAttribute(attributeName = "userName")
+    public String getUserName() {
+        return userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    @DynamoDBAttribute(attributeName = "completedOrders")
-    public List<Order> getCompletedOrders() {
-        return completedOrders;
-    }
-
-    public void setCompletedOrders(List<Order> completedOrders) {
-        this.completedOrders = completedOrders;
-    }
-    @DynamoDBAttribute(attributeName = "incompleteOrders")
-    public List<Order> getIncompleteOrders() {
-        return incompleteOrders;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomerRecord)) return false;
+        CustomerRecord that = (CustomerRecord) o;
+        return Objects.equals(id, that.id) && Objects.equals(userName, that.userName);
     }
 
-    public void setIncompleteOrders(List<Order> incompleteOrders) {
-        this.incompleteOrders = incompleteOrders;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName);
     }
 }

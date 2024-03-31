@@ -14,11 +14,12 @@ public class OrderRequest {
     @NotEmpty
     @JsonProperty("items")
     private List<String> items;
+
     public String getName() {
         return name;
     }
 
-    public List<String> getOrderItems() {
+    public List<String> items() {
         return items;
     }
 

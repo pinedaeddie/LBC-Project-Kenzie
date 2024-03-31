@@ -18,6 +18,29 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+    public OrderRecord addItemToOrder (String id, String item){
+
+        Optional<OrderRecord> record = orderRepository.findById(id);
+        List<String> itemList = record.get().getItems();
+        itemList.add(item);
+        OrderRecord newRecord = new OrderRecord();
+        newRecord.setItems(itemList);
+        newRecord.setName(record.get().getName());
+        newRecord.setId(record.get().getId());
+        newRecord.setOrderDate(record.get().getOrderDate());
+        newRecord.setOrderTotal(newRecord.getOrderTotal());
+        orderRepository.save(newRecord);
+        return newRecord;
+    }
+
+    public void placeOrder(OrderRecord order){
+        order.setId(order.getId());
+        order.setItems(order.getItems());
+        order.setOrderTotal(order.getOrderTotal());
+        order.setOrderDate(new Date());
+        orderRepository.save(order);
+    }
+
     public List<Order> findAll() {
 
         List<Order> order = new ArrayList<>();
@@ -26,45 +49,11 @@ public class OrderService {
             throw new IllegalArgumentException("No Orders Found" );
         }
         for (OrderRecord recordList : orderRecord){
-            Order newOrder = new Order(recordList.getId(), recordList.getName(), recordList.getOrderDate(), recordList.getOrderItems(), recordList.getOrderTotal());
+            Order newOrder = new Order(recordList.getId(), recordList.getName(), recordList.getOrderDate(), recordList.getItems(), recordList.getOrderTotal());
             order.add(newOrder);
         }
         return order;
     }
-
-//    public void startOrder(Order order) {
-//
-//        if (order == null) {
-//            throw new IllegalArgumentException("Order is null!");
-//        }
-//        Optional<OrderRecord> existingOrder = orderRepository.findById(order.getId());
-//        if (existingOrder.isPresent()) {
-//            throw new IllegalArgumentException("Order with ID " + order.getId() + " already exists!");
-//        }
-//
-//        OrderRecord orderRecord = new OrderRecord();
-//        orderRecord.setId(order.getId());
-//        orderRecord.setName(order.getName());
-//        orderRecord.setOrderDate(order.getOrderDate());
-//        orderRecord.setQuantity(order.getQuantity());
-//        orderRecord.setOrderItems(orderRecord.getOrderItems());
-//        orderRepository.save(orderRecord);
-//    }
-
-//    public void addItemToOrder(String id, Item item) {
-//        if (item == null) {
-//            throw new IllegalArgumentException("Item is null!");
-//        }
-//        Optional<OrderRecord> record = orderRepository.findById(id);
-//        if (!record.isPresent()) {
-//            throw new IllegalArgumentException("Order record not found: " + id);
-//        }
-//        OrderRecord orderRecord = record.get();
-//        List<Item> newItem = orderRecord.getOrderItems();
-//        newItem.add(item);
-//        orderRecord.setOrderItems(newItem);
-//        orderRepository.save(orderRecord);
-//    }
 
     public Order getOrderDetail(String id) {
         Optional<OrderRecord> record = orderRepository.findById(id);
@@ -73,9 +62,36 @@ public class OrderService {
         }
         OrderRecord orderRecord = record.get();
         Order order = new Order(orderRecord.getId(), orderRecord.getName(), new Date(),
-                orderRecord.getOrderItems(), orderRecord.getOrderTotal());
+                orderRecord.getItems(), orderRecord.getOrderTotal());
         return order;
     }
+
+    public void removeItemFromOrder(String orderId, String item) {
+        Optional<OrderRecord> recordOptional = orderRepository.findById(orderId);
+        if (recordOptional.isPresent()) {
+            OrderRecord orderRecord = recordOptional.get();
+            List<String> itemList = orderRecord.getItems();
+            itemList.removeIf(product -> product.equals(item));
+            OrderRecord record = new OrderRecord();
+            record.setItems(itemList);
+            record.setName(recordOptional.get().getName());
+            record.setId(recordOptional.get().getId());
+            record.setOrderDate(recordOptional.get().getOrderDate());
+            record.setOrderTotal(recordOptional.get().getOrderTotal());
+            orderRepository.save(record);
+        } else {
+            throw new IllegalArgumentException("Order record not found: " + orderId);
+        }
+    }
+
+    public OrderRecord searchOrderByName(String name) {
+        Optional<OrderRecord> record = orderRepository.findById(name);
+        if (!record.isPresent()) {
+            throw new IllegalArgumentException("Item id is invalid: " + name);
+        }
+        return record.get();
+    }
+
 
 //    public double getTotal(String id) {
 //
@@ -91,45 +107,4 @@ public class OrderService {
 //        orderRepository.save(orderRecord);
 //        return total;
 //    }
-
-//    public void removeItemFromOrder(String itemId, String orderId) {
-//        Optional<OrderRecord> record = orderRepository.findById(orderId);
-//        if (!record.isPresent()) {
-//            throw new IllegalArgumentException("Order record not found: " + orderId);
-//        }
-//        OrderRecord orderRecord = record.get();
-//        List<Item> itemList = orderRecord.getOrderItems();
-//
-//        Iterator<Item> iterator = itemList.iterator();
-//        while (iterator.hasNext()) {
-//            Item item = iterator.next();
-//            if (item.getItemId().equals(itemId)) {
-//                iterator.remove();
-//                break;
-//            }
-//        }
-//        orderRecord.setOrderItems(itemList);
-//        orderRepository.save(orderRecord);
-//    }
-
-//    public Item searchItemById(String id) {
-//        Optional<OrderRecord> record = orderRepository.findById(id);
-//        if (!record.isPresent()) {
-//            throw new IllegalArgumentException("Item id is invalid: " + id);
-//        }
-//
-//        OrderRecord orderRecord = record.get();
-//        List<Item> itemList = orderRecord.getOrderItems();
-//
-//        for (Item item : itemList) {
-//            if (item.getItemId().equals(id)) {
-//                return item;
-//            }
-//        }
-//
-//        throw new IllegalArgumentException("Item with id " + id + " not found in order.");
-//    }
-    public void placeOrder(OrderRecord order){
-        orderRepository.save(order);
-    }
 }
