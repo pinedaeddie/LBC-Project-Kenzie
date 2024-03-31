@@ -78,7 +78,9 @@ public class OrderRecord {
         if (this == o) return true;
         if (!(o instanceof OrderRecord)) return false;
         OrderRecord that = (OrderRecord) o;
-        return Double.compare(that.orderTotal, orderTotal) == 0 && quantity == that.quantity && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(orderDate, that.orderDate) && Objects.equals(orderItems, that.orderItems);
+        return Double.compare(that.orderTotal, orderTotal) == 0 && quantity == that.quantity
+                && Objects.equals(id, that.id) && Objects.equals(name, that.name)
+                && Objects.equals(orderDate, that.orderDate) && Objects.equals(orderItems, that.orderItems);
     }
 
     @Override

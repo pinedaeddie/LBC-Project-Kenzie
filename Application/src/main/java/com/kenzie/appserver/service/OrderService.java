@@ -12,7 +12,7 @@ import java.util.*;
 
 @Service
 public class OrderService {
-    @Autowired
+
     private final OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
@@ -48,7 +48,7 @@ public class OrderService {
         orderRecord.setName(order.getName());
         orderRecord.setOrderDate(order.getOrderDate());
         orderRecord.setQuantity(order.getQuantity());
-        orderRecord.setOrderItems(orderRecord.getOrderItems());
+        orderRecord.setOrderItems(order.getOrderItems());
         orderRepository.save(orderRecord);
     }
 

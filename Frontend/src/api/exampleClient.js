@@ -13,7 +13,7 @@ export default class ExampleClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'getExample', 'createExample'];
+        const methodsToBind = ['startOrder', 'addItemToOrder', 'getOrderDetail', 'findAllOrders', 'getOrderTotal', 'removeItemFromOrder', 'searchItemById'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -36,23 +36,66 @@ export default class ExampleClient extends BaseClass {
      * @param errorCallback (Optional) A function to execute if the call fails.
      * @returns The concert
      */
-    async getExample(id, errorCallback) {
+    async startOrder(orderRequest) {
         try {
-            const response = await this.client.get(`/example/${id}`);
+            const response = await this.client.post('/order/start', orderRequest);
             return response.data;
         } catch (error) {
-            this.handleError("getExample", error, errorCallback)
+            this.handleError("starting order", error, errorCallback);
         }
     }
 
-    async createExample(name, errorCallback) {
+    async addItemToOrder(id, itemRequest) {
         try {
-            const response = await this.client.post(`example`, {
-                "name" : name
-            });
+            const response = await this.client.post(`/order/add-item/${id}`, itemRequest);
             return response.data;
         } catch (error) {
-            this.handleError("createExample", error, errorCallback);
+            this.handleError("adding item to order", error, errorCallback);
+        }
+    }
+
+    async getOrderDetail(orderId) {
+        try {
+            const response = await this.client.get(`/order/${orderId}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("getting order details", error, errorCallback);
+        }
+    }
+
+    async findAllOrders() {
+        try {
+            const response = await this.client.get('/order/all');
+            return response.data;
+        } catch (error) {
+            this.handleError("getting all orders", error, errorCallback);
+        }
+    }
+
+    async getOrderTotal(orderId) {
+        try {
+            const response = await this.client.get(`/order/total/${orderId}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("getting order total", error, errorCallback);
+        }
+    }
+
+    async removeItemFromOrder(itemId, orderId) {
+        try {
+            const response = await this.client.delete(`/order/remove-item/${itemId}/${orderId}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("removing item from order", error, errorCallback);
+        }
+    }
+
+    async searchItemById(itemId) {
+        try {
+            const response = await this.client.get(`/order/items/search/${itemId}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("searchItemById", error, errorCallback);
         }
     }
 
