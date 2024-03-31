@@ -13,74 +13,18 @@ public class CustomerResponse {
     @JsonProperty("id")
     private String id;
     @NotEmpty
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("incompleteOrder")
-    private List<Order> incompleteOrder;
-    @JsonProperty("completeOrder")
-    private List<Order> completeOrder;
+    @JsonProperty("userName")
+    private String userName;
+
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-
-    public void setIncompleteOrder(List<Order> incompleteOrder) {
-        this.incompleteOrder = incompleteOrder;
-    }
-
-    public void setCompleteOrder(List<Order> completeOrder) {
-        this.completeOrder = completeOrder;
-    }
-    //    @NotEmpty
-//    @JsonProperty("itemId")
-//    private String itemId;
-//
-//    public String getItemId() {
-//        return itemId;
-//    }
-//
-//    public void setItemId(String itemId) {
-//        this.itemId = itemId;
-//    }
-//
-//
-//    @NotEmpty
-//    @JsonProperty("name")
-//    private String name;
-//    @NotEmpty
-//    @JsonProperty("quantity")
-//    private Integer quantity;
-//    @JsonProperty("price")
-//    private Double price;
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public Integer getQuantity() {
-//        return quantity;
-//    }
-//
-//    public void setQuantity(Integer quantity) {
-//        this.quantity = quantity;
-//    }
-//
-//    public Double getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(Double price) {
-//        this.price = price;
-//    }
 }
 
 
