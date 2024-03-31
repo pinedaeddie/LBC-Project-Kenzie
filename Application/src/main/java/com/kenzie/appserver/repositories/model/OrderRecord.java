@@ -3,23 +3,20 @@ package com.kenzie.appserver.repositories.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.kenzie.appserver.service.model.Item;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
-@DynamoDBTable(tableName = "Products")
+@DynamoDBTable(tableName = "Orders")
 public class OrderRecord {
 
     private String id;
     private String name;
     private Date orderDate;
-    private List<Item> orderItems;
+    private List<String> items;
     private double orderTotal;
-    private int quantity;
 
-    @DynamoDBHashKey(attributeName = "id")
+    @DynamoDBAttribute(attributeName = "id")
     public String getId() {
         return id;
     }
@@ -28,7 +25,7 @@ public class OrderRecord {
         this.id = id;
     }
 
-    @DynamoDBAttribute(attributeName = "name")
+    @DynamoDBHashKey(attributeName = "name")
     public String getName() {
         return name;
     }
@@ -46,13 +43,13 @@ public class OrderRecord {
         this.orderDate = orderDate;
     }
 
-    @DynamoDBAttribute(attributeName = "OrderItems")
-    public List<Item> getOrderItems() {
-        return orderItems;
+    @DynamoDBAttribute(attributeName = "items")
+    public List<String> getOrderItems() {
+        return items;
     }
 
-    public void setOrderItems(List<Item> orderItems) {
-        this.orderItems = orderItems;
+    public void setOrderItems(List<String> items) {
+        this.items = items;
     }
 
     @DynamoDBAttribute(attributeName = "OrderTotal")
@@ -64,25 +61,6 @@ public class OrderRecord {
         this.orderTotal = orderTotal;
     }
 
-    @DynamoDBAttribute(attributeName = "quantity")
-    public int getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderRecord)) return false;
-        OrderRecord that = (OrderRecord) o;
-        return Double.compare(that.orderTotal, orderTotal) == 0 && quantity == that.quantity && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(orderDate, that.orderDate) && Objects.equals(orderItems, that.orderItems);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, orderDate, orderItems, orderTotal, quantity);
-    }
 }
