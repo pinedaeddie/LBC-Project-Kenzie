@@ -9,18 +9,16 @@ import java.util.List;
 public class OrderRequest {
 
     @NotNull
-    @JsonProperty("name")
-    private String name;
-    @NotEmpty
+    @JsonProperty("userName")
+    private String userName;
     @JsonProperty("items")
     private List<String> items;
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public List<String> items() {
+    public List<String> getItems() {
         return items;
     }
-
 }

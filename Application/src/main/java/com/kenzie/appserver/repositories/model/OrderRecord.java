@@ -12,17 +12,16 @@ import java.util.Objects;
 public class OrderRecord {
 
     private String id;
-    private String name;
+    private String userName;
     private Date orderDate;
     private List<String> items;
-    private double orderTotal;
 
-    @DynamoDBHashKey(attributeName = "name")
-    public String getName() {
-        return name;
+    @DynamoDBHashKey(attributeName = "userName")
+    public String getUserName() {
+        return userName;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @DynamoDBAttribute(attributeName = "id")
@@ -34,7 +33,7 @@ public class OrderRecord {
         this.id = id;
     }
 
-    @DynamoDBAttribute(attributeName = "OrderDate")
+    @DynamoDBAttribute(attributeName = "orderDate")
     public Date getOrderDate() {
         return orderDate;
     }
@@ -51,13 +50,14 @@ public class OrderRecord {
         this.items = items;
     }
 
-    @DynamoDBAttribute(attributeName = "OrderTotal")
-    public double getOrderTotal() {
-        return orderTotal;
-    }
-
-    public void setOrderTotal(double orderTotal) {
-        this.orderTotal = orderTotal;
+    @Override
+    public String toString() {
+        return "OrderRecord{" +
+                "id='" + id + '\'' +
+                ", userName='" + userName + '\'' +
+                ", orderDate=" + orderDate +
+                ", items=" + items +
+                '}';
     }
 
     @Override
@@ -65,11 +65,11 @@ public class OrderRecord {
         if (this == o) return true;
         if (!(o instanceof OrderRecord)) return false;
         OrderRecord that = (OrderRecord) o;
-        return Double.compare(that.orderTotal, orderTotal) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(orderDate, that.orderDate) && Objects.equals(items, that.items);
+        return Objects.equals(id, that.id) && Objects.equals(userName, that.userName) && Objects.equals(orderDate, that.orderDate) && Objects.equals(items, that.items);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, orderDate, items, orderTotal);
+        return Objects.hash(id, userName, orderDate, items);
     }
 }

@@ -9,14 +9,12 @@ public class Order {
     private final String userName;
     private final Date orderDate;
     private final List<String> items;
-    private final Double orderTotal;
 
-    public Order(String id, String userName, Date orderDate, List<String> items, Double orderTotal) {
+    public Order(String id, String userName, Date orderDate, List<String> items) {
         this.id = id;
         this.userName = userName;
         this.orderDate = orderDate;
         this.items = items;
-        this.orderTotal = orderTotal;
     }
 
     public String getId() {
@@ -33,9 +31,5 @@ public class Order {
 
     public List<String> getItems() {
         return items;
-    }
-
-    public Double getOrderTotal() {
-        return orderTotal;
     }
 }

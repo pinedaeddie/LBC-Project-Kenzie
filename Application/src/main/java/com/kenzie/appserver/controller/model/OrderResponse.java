@@ -13,8 +13,8 @@ public class OrderResponse {
     @JsonProperty("id")
     private String id;
     @NotEmpty
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("userName")
+    private String userName;
     @NotEmpty
     @JsonProperty("items")
     private List<String> items;
@@ -22,23 +22,20 @@ public class OrderResponse {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public List<String> getItems() {
         return items;
     }
-
     public void setItems(List<String> items) {
         this.items = items;
     }
