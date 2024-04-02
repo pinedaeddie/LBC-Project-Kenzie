@@ -34,7 +34,7 @@ public class OrderServiceTest {
 
         OrderRecord record = new OrderRecord();
         record.setId(id);
-        record.setName("testName");
+        record.setUserName("testName");
 
         // WHEN
         when(orderRepository.findById(id)).thenReturn(Optional.of(record));
