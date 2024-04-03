@@ -1,21 +1,25 @@
 package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.IntegrationTest;
+import com.kenzie.appserver.controller.model.OrderRequest;
+import com.kenzie.appserver.repositories.model.OrderRecord;
 import com.kenzie.appserver.service.OrderService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kenzie.appserver.service.model.Order;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
+import java.util.*;
 
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @IntegrationTest
@@ -32,42 +36,138 @@ class OrderControllerTest {
 
 
     @Test
-    public void getById_Exists() throws Exception {
-//        String id = UUID.randomUUID().toString();
-//        String name = mockNeat.strings().valStr();
-//
-//        Order example = new Order(id, name);
-//        Order persistedExample = orderService.(example);
-//        mvc.perform(get("/example/{id}", persistedExample.getId())
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("id")
-//                        .value(is(id)))
-//                .andExpect(jsonPath("name")
-//                        .value(is(name)))
-//                .andExpect(status().isOk());
-    }
+    public void startOrder_Successful() throws Exception {
 
+        String userName = mockNeat.strings().valStr();
+        List<String> items = Arrays.asList("item1", "item2");
 
-    /*
-    @Test
-    public void createExample_CreateSuccessful() throws Exception {
-        String name = mockNeat.strings().valStr();
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setUserName(userName);
+        orderRequest.setItems(items);
 
-        OrderRequest exampleCreateRequest = new OrderRequest();
-        exampleCreateRequest.setName(name);
-
-        mapper.registerModule(new JavaTimeModule());
-
-        mvc.perform(post("/example")
+        mvc.perform(post("/order/startOrder")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(exampleCreateRequest)))
-                .andExpect(jsonPath("id")
-                        .exists())
-                .andExpect(jsonPath("name")
-                        .value(is(name)))
-                .andExpect(status().isCreated());
+                        .content(mapper.writeValueAsString(orderRequest)))
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("userName").value(is(userName)))
+                .andExpect(jsonPath("items", hasSize(2)))
+                .andExpect(status().isOk());
     }
 
-     */
+    @Test
+    public void startOrder_Successful_WithEmptyItems() throws Exception {
+
+        String userName = mockNeat.strings().valStr();
+        List<String> items = Collections.emptyList();
+
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setUserName(userName);
+        orderRequest.setItems(items);
+
+        mvc.perform(post("/order/startOrder")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(orderRequest)))
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("userName").value(is(userName)))
+                .andExpect(jsonPath("items", hasSize(0)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addItemToOrder_Successful() throws Exception {
+
+        String username = mockNeat.strings().valStr();
+        List<String> newItems = Arrays.asList("item3", "item4");
+
+        OrderRecord orderRecord = new OrderRecord();
+        orderRecord.setUserName(username);
+        orderRecord.setId(UUID.randomUUID().toString());
+        orderRecord.setItems(Arrays.asList("item1", "item2"));
+        orderService.startOrder(orderRecord);
+
+        mvc.perform(post("/order/add-item/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(newItems)))
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("userName").value(is(username)))
+                .andExpect(jsonPath("items", hasSize(4)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addItemToOrder_EmptyItemsList() throws Exception {
+
+        String username = mockNeat.strings().valStr();
+        List<String> items = Collections.emptyList();
+
+        mvc.perform(post("/order/add-item/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(items)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void searchOrderByName_ExistingOrder_Successful() throws Exception {
+
+        String username = mockNeat.strings().valStr();
+
+        OrderRecord orderRecord = new OrderRecord();
+        orderRecord.setUserName(username);
+        orderRecord.setId(UUID.randomUUID().toString());
+        orderRecord.setItems(Arrays.asList("item1", "item2"));
+        orderService.startOrder(orderRecord);
+
+        mvc.perform(get("/order/search/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("userName").value(username))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    public void removeItemFromOrder_Successful() throws Exception {
+
+        String username = "testUsername";
+        String itemToRemove = mockNeat.strings().valStr();
+
+        OrderRecord record = new OrderRecord();
+        record.setUserName(username);
+        record.setId(UUID.randomUUID().toString());
+        record.setItems(new ArrayList<>());
+        orderService.startOrder(record);
+
+        List<String> items = Arrays.asList("item1", "item2");
+        orderService.addItemToOrder(record.getUserName(), items);
+
+        mvc.perform(delete("/order/remove-item/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("item", itemToRemove))
+                .andExpect(content().string(""))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void removeItemFromOrder_ItemNotFound() throws Exception {
+
+        String username = "testUsername";
+        String nonExistingItem = mockNeat.strings().valStr();
+
+        OrderRecord record = new OrderRecord();
+        record.setUserName(username);
+        record.setId(UUID.randomUUID().toString());
+        record.setItems(Arrays.asList("item1", "item2"));
+        orderService.startOrder(record);
+
+        mvc.perform(delete("/order/remove-item/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("item", nonExistingItem))
+                .andExpect(status().isOk());
+    }
 }

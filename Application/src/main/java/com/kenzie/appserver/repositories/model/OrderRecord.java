@@ -25,19 +25,13 @@ public class OrderRecord {
     }
 
     @DynamoDBAttribute(attributeName = "id")
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getId() {return id;}
+    public void setId(String id) {this.id = id;}
 
     @DynamoDBAttribute(attributeName = "orderDate")
     public Date getOrderDate() {
         return orderDate;
     }
-
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }

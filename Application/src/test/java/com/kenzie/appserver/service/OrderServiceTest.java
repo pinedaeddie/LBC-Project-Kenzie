@@ -8,11 +8,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
-import static java.util.UUID.randomUUID;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 public class OrderServiceTest {
     private OrderRepository orderRepository;
@@ -23,41 +26,47 @@ public class OrderServiceTest {
         orderRepository = mock(OrderRepository.class);
         orderService = new OrderService(orderRepository);
     }
+
+
     /** ------------------------------------------------------------------------
-     *  exampleService.findById
+     *  OrderService.removeItemFromOrder
      *  ------------------------------------------------------------------------ **/
 
     @Test
-    void findById() {
+    void removeItemFromOrder_WhenOrderDoesNotExist_ShouldThrowIllegalArgumentException() {
         // GIVEN
-        String id = randomUUID().toString();
+        String orderId = "123";
+        String itemToRemove = "ItemToRemove";
 
-        OrderRecord record = new OrderRecord();
-        record.setId(id);
-        record.setUserName("testName");
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
-        // WHEN
-        when(orderRepository.findById(id)).thenReturn(Optional.of(record));
-//        Order example = orderService.findById(id);
-
-        // THEN
-//        Assertions.assertNotNull(example, "The object is returned");
-//        Assertions.assertEquals(record.getId(), example.getId(), "The id matches");
-//        Assertions.assertEquals(record.getName(), example.getName(), "The name matches");
+        // WHEN & THEN
+        assertThrows(IllegalArgumentException.class, () -> orderService.removeItemFromOrder(orderId, itemToRemove));
     }
 
     @Test
-    void findByConcertId_invalid() {
+    void removeItemFromOrder_WhenOrderExistsAndItemExists_ShouldRemoveItemFromOrder() {
         // GIVEN
-        String id = randomUUID().toString();
+        String orderId = "123";
+        String itemToRemove = "ItemToRemove";
+        List<String> items = new ArrayList<>();
+        items.add("Item1");
+        items.add("Item2");
+        items.add(itemToRemove);
+        OrderRecord orderRecord = new OrderRecord();
+        orderRecord.setId(orderId);
+        orderRecord.setUserName("TestUser");
+        orderRecord.setOrderDate(new Date());
+        orderRecord.setItems(items);
 
-        when(orderRepository.findById(id)).thenReturn(Optional.empty());
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(orderRecord));
 
         // WHEN
-//        Order example = orderService.findById(id);
-//
-//        // THEN
-//        Assertions.assertNull(example, "The example is null when not found");
+        orderService.removeItemFromOrder(orderId, itemToRemove);
+
+        // THEN
+        verify(orderRepository).save(any(OrderRecord.class));
+        assertFalse(orderRecord.getItems().contains(itemToRemove));
     }
 
 }

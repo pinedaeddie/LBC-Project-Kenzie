@@ -13,7 +13,7 @@ export default class ExampleClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['startOrder', 'addItemToOrder', 'getOrderDetail', 'findAllOrders', 'getOrderTotal', 'removeItemFromOrder', 'searchItemById'];
+        const methodsToBind = ['startOrder', 'addItemToOrder', 'searchOrderByName', 'findAll', 'removeItemFromOrder'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -38,32 +38,32 @@ export default class ExampleClient extends BaseClass {
      */
     async startOrder(orderRequest) {
         try {
-            const response = await this.client.post('/order/start', orderRequest);
+            const response = await this.client.post('/order/startOrder', orderRequest);
             return response.data;
         } catch (error) {
             this.handleError("starting order", error, errorCallback);
         }
     }
 
-    async addItemToOrder(id, itemRequest) {
+    async addItemToOrder(name, item) {
         try {
-            const response = await this.client.post(`/order/add-item/${id}`, itemRequest);
+            const response = await this.client.post(`/order/add-item/${name}`, item);
             return response.data;
         } catch (error) {
             this.handleError("adding item to order", error, errorCallback);
         }
     }
 
-    async getOrderDetail(orderId) {
+    async searchOrderByName(name) {
         try {
-            const response = await this.client.get(`/order/${orderId}`);
+            const response = await this.client.get(`/order/search/${name}`);
             return response.data;
         } catch (error) {
-            this.handleError("getting order details", error, errorCallback);
+            this.handleError("searchOrderByName", error, errorCallback);
         }
     }
 
-    async findAllOrders() {
+    async findAll() {
         try {
             const response = await this.client.get('/order/all');
             return response.data;
@@ -72,30 +72,14 @@ export default class ExampleClient extends BaseClass {
         }
     }
 
-    async getOrderTotal(orderId) {
-        try {
-            const response = await this.client.get(`/order/total/${orderId}`);
-            return response.data;
-        } catch (error) {
-            this.handleError("getting order total", error, errorCallback);
-        }
-    }
 
-    async removeItemFromOrder(itemId, orderId) {
+
+    async removeItemFromOrder(userName, item) {
         try {
-            const response = await this.client.delete(`/order/remove-item/${itemId}/${orderId}`);
+            const response = await this.client.delete(`/order/remove-item/${userName}`);
             return response.data;
         } catch (error) {
             this.handleError("removing item from order", error, errorCallback);
-        }
-    }
-
-    async searchItemById(itemId) {
-        try {
-            const response = await this.client.get(`/order/items/search/${itemId}`);
-            return response.data;
-        } catch (error) {
-            this.handleError("searchItemById", error, errorCallback);
         }
     }
 

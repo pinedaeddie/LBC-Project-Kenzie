@@ -9,9 +9,10 @@ import java.util.*;
 
 @Service
 public class OrderService {
-    @Autowired
+
     private final OrderRepository orderRepository;
 
+    @Autowired
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
@@ -23,18 +24,18 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public OrderRecord addItemToOrder (String id, String item){
-
-        Optional<OrderRecord> record = orderRepository.findById(id);
-        List<String> itemList = record.get().getItems();
-        itemList.add(item);
-        OrderRecord newRecord = new OrderRecord();
-        newRecord.setItems(itemList);
-        newRecord.setUserName(record.get().getUserName());
-        newRecord.setId(record.get().getId());
-        newRecord.setOrderDate(record.get().getOrderDate());
-        orderRepository.save(newRecord);
-        return newRecord;
+    public OrderRecord addItemToOrder(String name, List<String> items) {
+        Optional<OrderRecord> recordOptional = orderRepository.findById(name);
+        if (recordOptional.isPresent()) {
+            OrderRecord orderRecord = recordOptional.get();
+            List<String> itemList = orderRecord.getItems();
+            itemList.addAll(items);
+            orderRecord.setItems(itemList);
+            orderRepository.save(orderRecord);
+            return orderRecord;
+        } else {
+            throw new IllegalArgumentException("Order record not found: " + name);
+        }
     }
 
     public OrderRecord searchOrderByName (String name) {
@@ -65,12 +66,9 @@ public class OrderService {
             OrderRecord orderRecord = recordOptional.get();
             List<String> itemList = orderRecord.getItems();
             itemList.removeIf(product -> product.equals(item));
-            OrderRecord record = new OrderRecord();
-            record.setItems(itemList);
-            record.setUserName(recordOptional.get().getUserName());
-            record.setId(recordOptional.get().getId());
-            record.setOrderDate(recordOptional.get().getOrderDate());
-            orderRepository.save(record);
+            orderRecord.setItems(itemList);
+            orderRepository.save(orderRecord);
+
         } else {
             throw new IllegalArgumentException("Order record not found: " + orderId);
         }
