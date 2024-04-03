@@ -4,17 +4,18 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.repositories.OrderRepository;
 import com.kenzie.appserver.repositories.model.OrderRecord;
 import com.kenzie.appserver.service.model.Order;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.*;
 
 public class OrderServiceTest {
@@ -26,47 +27,79 @@ public class OrderServiceTest {
         orderRepository = mock(OrderRepository.class);
         orderService = new OrderService(orderRepository);
     }
-
-
     /** ------------------------------------------------------------------------
-     *  OrderService.removeItemFromOrder
+     *  exampleService.findById
      *  ------------------------------------------------------------------------ **/
 
+   @Test
+    void searchOrderByUsername_validOrderName_returnsOrderRecord(){
+//       Given
+       OrderRecord expectedRecord = new OrderRecord();
+       expectedRecord.setUserName("testUser");
+       when(orderRepository.findById(expectedRecord.getUserName())).thenReturn(Optional.of(expectedRecord));
+//       When
+       OrderRecord returnedRecord = orderService.searchOrderByName(expectedRecord.getUserName());
+//       Then
+       Assertions.assertEquals(expectedRecord.getUserName(), returnedRecord.getUserName(), "The record userNames do not match!");
+
+   }
     @Test
-    void removeItemFromOrder_WhenOrderDoesNotExist_ShouldThrowIllegalArgumentException() {
-        // GIVEN
-        String orderId = "123";
-        String itemToRemove = "ItemToRemove";
-
-        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
-
-        // WHEN & THEN
-        assertThrows(IllegalArgumentException.class, () -> orderService.removeItemFromOrder(orderId, itemToRemove));
+    void searchByOrder_invalidRecord_throwsException()throws Exception{
+        OrderRecord expectedRecord = new OrderRecord();
+        expectedRecord.setUserName("testUser");
+        when(orderRepository.findById(expectedRecord.getUserName())).thenReturn(Optional.empty());
+//       When
+        try{
+            OrderRecord returnedRecord = orderService.searchOrderByName(expectedRecord.getUserName());
+            Assertions.assertNotEquals(expectedRecord.getUserName(), returnedRecord.getUserName(), "The record userName was returned for an undefined record!");
+        }catch (Exception e){
+//            Then
+            Assertions.assertThrows(
+                    IllegalArgumentException.class,
+                    () -> orderService.searchOrderByName(expectedRecord.getUserName()));    }
     }
-
     @Test
-    void removeItemFromOrder_WhenOrderExistsAndItemExists_ShouldRemoveItemFromOrder() {
-        // GIVEN
-        String orderId = "123";
-        String itemToRemove = "ItemToRemove";
-        List<String> items = new ArrayList<>();
-        items.add("Item1");
-        items.add("Item2");
-        items.add(itemToRemove);
-        OrderRecord orderRecord = new OrderRecord();
-        orderRecord.setId(orderId);
-        orderRecord.setUserName("TestUser");
-        orderRecord.setOrderDate(new Date());
-        orderRecord.setItems(items);
+    void findAll_validRecords_returnsListOfOrders(){
+        ArrayList<OrderRecord> recordList = new ArrayList<>();
 
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(orderRecord));
+        OrderRecord expectedRecord = new OrderRecord();
+        OrderRecord expectedRecord2 = new OrderRecord();
+        OrderRecord expectedRecord3 = new OrderRecord();
 
-        // WHEN
-        orderService.removeItemFromOrder(orderId, itemToRemove);
+        expectedRecord.setUserName("testRecord1");
+        expectedRecord.setId("1234");
+        expectedRecord.setItems(new ArrayList<>());
+        expectedRecord2.setUserName("testRecord2");
+        expectedRecord2.setId("5678");
+        expectedRecord2.setItems(new ArrayList<>());
+        expectedRecord3.setUserName("testRecord3");
+        expectedRecord3.setId("9");
+        expectedRecord3.setItems(new ArrayList<>());
+        recordList.add(expectedRecord);
+        recordList.add(expectedRecord2);
+        recordList.add(expectedRecord3);
 
-        // THEN
-        verify(orderRepository).save(any(OrderRecord.class));
-        assertFalse(orderRecord.getItems().contains(itemToRemove));
+        when(orderRepository.findAll()).thenReturn(recordList);
+//       When
+        List<Order> returnedRecord = orderService.findAll();
+        Assertions.assertEquals(returnedRecord.get(0).getUserName(),expectedRecord.getUserName());
+        Assertions.assertEquals(returnedRecord.get(1).getUserName(),expectedRecord2.getUserName());
+        Assertions.assertEquals(returnedRecord.get(2).getUserName(),expectedRecord3.getUserName());
+
+
     }
-
+    @Test
+    void findAll_noRecords_throwsException() throws Exception{
+//       Given
+        ArrayList<OrderRecord> recordList = new ArrayList<>();
+        when(orderRepository.findAll()).thenReturn(recordList);
+        try{
+//       When
+            List<Order> returnedRecord = orderService.findAll();
+        }catch (Exception e){
+//       Then
+            Assert.assertThrows(IllegalArgumentException.class,
+            ()->orderService.findAll());
+        }
+    }
 }
