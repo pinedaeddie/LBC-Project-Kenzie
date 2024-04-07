@@ -2,18 +2,13 @@ import BaseClass from "../util/baseClass";
 import axios from 'axios'
 
 /**
- * Client to call the MusicPlaylistService.
- *
- * This could be a great place to explore Mixins. Currently the client is being loaded multiple times on each page,
- * which we could avoid using inheritance or Mixins.
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins
- * https://javascript.info/mixins
+ * Client to call the ExampleService.
  */
-export default class ExampleClient extends BaseClass {
+export default class OrderClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['startOrder', 'addItemToOrder', 'searchOrderByName', 'findAll', 'removeItemFromOrder'];
+        const methodsToBind = ['clientLoaded', 'startOrder', 'addItemToOrder', 'searchOrderByName', 'findAll', 'removeItemFromOrder'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -23,6 +18,7 @@ export default class ExampleClient extends BaseClass {
      * Run any functions that are supposed to be called once the client has loaded successfully.
      * @param client The client that has been successfully loaded.
      */
+
     clientLoaded(client) {
         this.client = client;
         if (this.props.hasOwnProperty("onReady")){
@@ -36,50 +32,53 @@ export default class ExampleClient extends BaseClass {
      * @param errorCallback (Optional) A function to execute if the call fails.
      * @returns The concert
      */
-    async startOrder(orderRequest) {
+
+    async startOrder(request, errorCallback) {
         try {
-            const response = await this.client.post('/order/startOrder', orderRequest);
+            const response = await this.client.post('/order/startOrder',
+                {
+                    userName: request,
+                    items: []
+                });
             return response.data;
         } catch (error) {
-            this.handleError("starting order", error, errorCallback);
+            this.handleError("startOrder", error, errorCallback);
         }
     }
 
-    async addItemToOrder(name, item) {
+    async addItemToOrder(username, item, errorCallback) {
         try {
-            const response = await this.client.post(`/order/add-item/${name}`, item);
+            const response = await this.client.post(`/order/add-item/${username}`,[item]);
             return response.data;
         } catch (error) {
-            this.handleError("adding item to order", error, errorCallback);
+            this.handleError("addItemToOrder", error, errorCallback);
         }
     }
 
-    async searchOrderByName(name) {
+    async searchOrderByName(username, errorCallback) {
         try {
-            const response = await this.client.get(`/order/search/${name}`);
+            const response = await this.client.get(`/order/search/${username}`);
             return response.data;
         } catch (error) {
             this.handleError("searchOrderByName", error, errorCallback);
         }
     }
 
-    async findAll() {
+    async findAll(errorCallback) {
         try {
-            const response = await this.client.get('/order/all');
+            const response = await this.client.get(`/order/all`);
             return response.data;
         } catch (error) {
-            this.handleError("getting all orders", error, errorCallback);
+            this.handleError("findAll", error, errorCallback);
         }
     }
 
-
-
-    async removeItemFromOrder(userName, item) {
+    async removeItemFromOrder(username, item, errorCallback) {
         try {
-            const response = await this.client.delete(`/order/remove-item/${userName}`);
+            const response = await this.client.delete(`/order/remove-item/${username}?item=${item}`);
             return response.data;
         } catch (error) {
-            this.handleError("removing item from order", error, errorCallback);
+            this.handleError("removeItemFromOrder", error, errorCallback);
         }
     }
 
@@ -88,6 +87,7 @@ export default class ExampleClient extends BaseClass {
      * @param error The error received from the server.
      * @param errorCallback (Optional) A function to execute if the call fails.
      */
+
     handleError(method, error, errorCallback) {
         console.error(method + " failed - " + error);
         if (error.response.data.message !== undefined) {

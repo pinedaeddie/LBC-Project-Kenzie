@@ -8,7 +8,10 @@ module.exports = {
     usedExports: true
   },
   entry: {
-    examplePage: path.resolve(__dirname, 'src', 'pages', 'examplePage.js'),
+    mainPage: path.resolve(__dirname, 'src', 'pages', 'mainPage.js'),
+    startOrderPage: path.resolve(__dirname, 'src', 'pages', 'startOrderPage.js'),
+    shoppingCart: path.resolve(__dirname, 'src', 'pages', 'shoppingCart.js'),
+    orderHistoryPage: path.resolve(__dirname, 'src', 'pages', 'orderHistoryPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -28,7 +31,7 @@ module.exports = {
     proxy: [
           {
             context: [
-              '/example',
+              '/order',
             ],
             target: 'http://localhost:5001'
           }
@@ -36,8 +39,23 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      template: './src/main.html',
+      filename: 'main.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/startOrder.html',
+      filename: 'startOrder.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/orderHistory.html',
+      filename: 'orderHistory.html',
       inject: false
     }),
     new CopyPlugin({
@@ -45,6 +63,14 @@ module.exports = {
         {
           from: path.resolve('src/css'),
           to: path.resolve("dist/css")
+        }
+      ]
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve('src/image'),
+          to: path.resolve("dist/image")
         }
       ]
     }),

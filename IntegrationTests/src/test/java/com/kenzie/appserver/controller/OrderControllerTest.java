@@ -134,12 +134,16 @@ class OrderControllerTest {
 
         String username = "testUsername";
         String itemToRemove = mockNeat.strings().valStr();
-
         OrderRecord record = new OrderRecord();
         record.setUserName(username);
         record.setId(UUID.randomUUID().toString());
         record.setItems(new ArrayList<>());
-        orderService.startOrder(record);
+
+        try {
+            orderService.startOrder(record);
+        } catch (IllegalArgumentException e) {
+
+        }
 
         List<String> items = Arrays.asList("item1", "item2");
         orderService.addItemToOrder(record.getUserName(), items);

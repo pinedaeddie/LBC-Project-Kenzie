@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript" src="shoppingCart.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GroceryBros</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+<header class="header" id="header">
+  <nav class="nav">
+    <div class="site-title">
+      <a class="header_home" href="index.html"><i class="fa fa-fw fa-home"></i> HOME</a>
+      <a href="startOrder.html"><i class="fa fa-user"></i> CREATE NEW USER</a>
+      <a href="orderHistory.html"><i class="fa fa-search"></i> VIEW ORDER HISTORY</a>
+    </div>
+  </nav>
+</header>
+
+<section class="home">
+  <div class="content">
+
+    <form class="card-content" id="add-order">
+      <h2>Add Item to Cart</h2>
+      <p class="form-field">
+        <input type="text" required class="validated-field" id="create-add-field" placeholder="UserName">
+      </p>
+      <p class="form-field">
+        <input type="text" required class="validated-field" id="item-list-field" placeholder="Item">
+      </p>
+      <button type="submit">Add to Cart</button>
+    </form>
+
+
+    <form class="card-content" id="delete-order">
+      <h2>Remove Item From Cart</h2>
+      <p class="form-field">
+        <input type="text" required class="validated-field" id="create-name-field" placeholder="UserName">
+      </p>
+      <p class="form-field">
+        <input type="text" required class="validated-field" id="remove-item-field" placeholder="Item">
+      </p>
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+</section>
+
+<div class="card" id="result">
+  <h3>Current Order:</h3>
+  <p id="result-info"></p>
+</div>
+
+</body>
+</html>
