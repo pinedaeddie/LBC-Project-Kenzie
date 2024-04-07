@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import com.kenzie.appserver.repositories.OrderRepository;
 import com.kenzie.appserver.repositories.model.OrderRecord;
 import com.kenzie.appserver.service.model.Order;
@@ -9,38 +10,50 @@ import java.util.*;
 
 @Service
 public class OrderService {
-    @Autowired
+
     private final OrderRepository orderRepository;
 
+    @Autowired
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     public void startOrder (OrderRecord order){
-        order.setId(order.getId());
-        order.setItems(order.getItems());
-        order.setOrderDate(new Date());
-        orderRepository.save(order);
+        if (order == null) {
+            throw new IllegalArgumentException("OrderRecord cannot be null");
+        }
+
+        Optional<OrderRecord> existingRecord = orderRepository.findById(order.getUserName());
+        if(!existingRecord.isPresent()){
+            order.setId(UUID.randomUUID().toString());
+            order.setOrderDate(new Date());
+            orderRepository.save(order);
+        }else {
+            throw new IllegalArgumentException("The UserName already exists! Please try another!");
+        }
     }
 
-    public OrderRecord addItemToOrder (String id, String item){
-
-        Optional<OrderRecord> record = orderRepository.findById(id);
-        List<String> itemList = record.get().getItems();
-        itemList.add(item);
-        OrderRecord newRecord = new OrderRecord();
-        newRecord.setItems(itemList);
-        newRecord.setUserName(record.get().getUserName());
-        newRecord.setId(record.get().getId());
-        newRecord.setOrderDate(record.get().getOrderDate());
-        orderRepository.save(newRecord);
-        return newRecord;
+    public OrderRecord addItemToOrder(String userName, List<String> items) {
+        Optional<OrderRecord> record = orderRepository.findById(userName);
+        if (record.isPresent()){
+            List<String> itemList = record.get().getItems();
+            itemList.addAll(items);
+            OrderRecord newRecord = new OrderRecord();
+            newRecord.setItems(itemList);
+            newRecord.setUserName(record.get().getUserName());
+            newRecord.setId(record.get().getId());
+            newRecord.setOrderDate(record.get().getOrderDate());
+            orderRepository.save(newRecord);
+            return newRecord;
+        } else {
+            throw new IllegalArgumentException("UserName was not found, unable to add item to : "+ userName);
+        }
     }
 
     public OrderRecord searchOrderByName (String name) {
         Optional<OrderRecord> record = orderRepository.findById(name);
         if (!record.isPresent()) {
-            throw new IllegalArgumentException("Item id is invalid: " + name);
+            throw new IllegalArgumentException("Order name is invalid: " + name);
         }
         return record.get();
     }
@@ -59,20 +72,17 @@ public class OrderService {
         return order;
     }
 
-    public void removeItemFromOrder(String orderId, String item) {
-        Optional<OrderRecord> recordOptional = orderRepository.findById(orderId);
+    public void removeItemFromOrder(String username, String item) {
+        Optional<OrderRecord> recordOptional = orderRepository.findById(username);
         if (recordOptional.isPresent()) {
             OrderRecord orderRecord = recordOptional.get();
             List<String> itemList = orderRecord.getItems();
-            itemList.removeIf(product -> product.equals(item));
-            OrderRecord record = new OrderRecord();
-            record.setItems(itemList);
-            record.setUserName(recordOptional.get().getUserName());
-            record.setId(recordOptional.get().getId());
-            record.setOrderDate(recordOptional.get().getOrderDate());
-            orderRepository.save(record);
+            itemList.removeIf(product -> product.equalsIgnoreCase(item));
+            orderRecord.setItems(itemList);
+            orderRepository.save(orderRecord);
+
         } else {
-            throw new IllegalArgumentException("Order record not found: " + orderId);
+            throw new UnsupportedOperationException("Order record not found: " + username);
         }
     }
 }

@@ -3,10 +3,7 @@ package com.kenzie.appserver.repositories.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @DynamoDBTable(tableName = "Orders")
 public class OrderRecord {
@@ -20,24 +17,16 @@ public class OrderRecord {
     public String getUserName() {
         return userName;
     }
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    public void setUserName(String userName) {this.userName = userName;}
 
     @DynamoDBAttribute(attributeName = "id")
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getId() {return id;}
+    public void setId(String id) {this.id = id;}
 
     @DynamoDBAttribute(attributeName = "orderDate")
     public Date getOrderDate() {
         return orderDate;
     }
-
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
@@ -47,7 +36,11 @@ public class OrderRecord {
         return items;
     }
     public void setItems(List<String> items) {
-        this.items = items;
+        List<String> fixed = new ArrayList<>();
+        for (String item : items) {
+            fixed.add(item.trim().toUpperCase(Locale.ROOT));
+        }
+        this.items = fixed;
     }
 
     @Override

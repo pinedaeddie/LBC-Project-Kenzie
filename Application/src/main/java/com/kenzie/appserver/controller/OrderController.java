@@ -35,10 +35,9 @@ public class OrderController {
     }
 
     @PostMapping("/add-item/{username}")
-    public ResponseEntity<OrderRecord> addItemToOrder(@PathVariable("username") String name, @RequestBody  String item) {
-
+    public ResponseEntity<OrderRecord> addItemToOrder(@PathVariable("username") String name, @RequestBody List<String> items) {
         try {
-            return ResponseEntity.ok(orderService.addItemToOrder(name, item));
+            return ResponseEntity.ok(orderService.addItemToOrder(name, items));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -46,7 +45,18 @@ public class OrderController {
 
     @GetMapping("/search/{username}")
     public ResponseEntity<OrderRecord> searchOrderByName(@PathVariable("username") String name) {
-        return ResponseEntity.ok(orderService.searchOrderByName(name));
+        try {
+            if (name == null || name.isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+            OrderRecord orderRecord = orderService.searchOrderByName(name);
+            if (orderRecord == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(orderRecord);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/all")
@@ -61,8 +71,8 @@ public class OrderController {
     }
 
     @DeleteMapping("/remove-item/{username}")
-    public ResponseEntity<OrderRecord> removeItemFromOrder(@PathVariable ("username") String orderId, String item) {
-        orderService.removeItemFromOrder(orderId, item);
+    public ResponseEntity<OrderRecord> removeItemFromOrder(@PathVariable("username") String userName, @RequestParam String item) {
+        orderService.removeItemFromOrder(userName, item);
         return ResponseEntity.ok().build();
     }
 }

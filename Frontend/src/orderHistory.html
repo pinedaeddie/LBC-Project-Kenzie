@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="orderHistoryPage.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrderHistory</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+<header class="header" id="header">
+    <nav  class="nav">
+        <div class="site-title">
+            <a class="header_home" href="index.html"><i class="fa fa-fw fa-home"></i> HOME</a>
+        </div>
+    </nav>
+</header>
+
+<section class="home">
+    <div class="content">
+        <h2>Find An Order By Name</h2>
+        <form class="card-content" id="find-order-by-name">
+            <h3>Please Enter Your UserName To Retrieve An Order</h3>
+            <p class="form-field">
+                <input type="text" required class="validated-field" id="find-userName" placeholder="UserName">
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+
+        <form class="card-content" id="findAll">
+            <p class="form-field">
+                <label>View Order History</label>
+                <button type="submit">Submit</button>
+            </p>
+        </form>
+    </div>
+</section>
+
+<div class="card" id="result">
+    <h3>Order Result:</h3>
+    <p id="result-info"></p>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+

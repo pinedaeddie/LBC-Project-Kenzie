@@ -2,7 +2,6 @@ package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -18,7 +17,9 @@ public class OrderRequest {
         return userName;
     }
 
-    public List<String> getItems() {
-        return items;
-    }
+    public void setUserName(String userName) {this.userName = userName;}
+
+    public List<String> getItems() {return items;}
+
+    public void setItems(List<String> items) {this.items = items;}
 }
