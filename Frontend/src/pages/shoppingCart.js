@@ -32,17 +32,17 @@ class ShoppingCart extends BaseClass {
         if (example) {
             const list = example.items;
             if (list && list.length > 0) {
-                let html = "<li>";
+                let html = "<ul>";
                 for (let i = 0; i < list.length; i++) {
                     html += `<h4>${list[i]}</h4>`;
                 }
-                html += "</li>";
+                html += "</ul>";
                 result.innerHTML = html;
             } else {
                 result.innerHTML = "No Items";
             }
         } else {
-            result.innerHTML = "No Order Record";
+            result.innerHTML = "";
         }
     }
 

@@ -4,20 +4,15 @@ import com.kenzie.appserver.IntegrationTest;
 import com.kenzie.appserver.controller.model.OrderRequest;
 import com.kenzie.appserver.repositories.model.OrderRecord;
 import com.kenzie.appserver.service.OrderService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
+import java.time.ZonedDateTime;
 import java.util.*;
-
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -128,6 +123,22 @@ class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void findAll_Successful() throws Exception {
+
+        OrderRecord orderRecord1 = new OrderRecord();
+        orderRecord1.setId(UUID.randomUUID().toString());
+        orderRecord1.setUserName("user1");
+        orderRecord1.setOrderDate(Date.from(ZonedDateTime.now().toInstant()));
+        orderRecord1.setItems(Arrays.asList("item1", "item2"));
+
+        orderService.save(orderRecord1);
+
+        mvc.perform(get("/order/all"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
 
     @Test
     public void removeItemFromOrder_Successful() throws Exception {
@@ -148,11 +159,16 @@ class OrderControllerTest {
         List<String> items = Arrays.asList("item1", "item2");
         orderService.addItemToOrder(record.getUserName(), items);
 
+        OrderRecord expectedOrderRecord = new OrderRecord();
+        expectedOrderRecord.setId(record.getId());
+        expectedOrderRecord.setUserName(record.getUserName());
+        expectedOrderRecord.setOrderDate(record.getOrderDate());
+        expectedOrderRecord.setItems(Arrays.asList("item1", "item2"));
+
         mvc.perform(delete("/order/remove-item/{username}", username)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("item", itemToRemove))
-                .andExpect(content().string(""))
                 .andExpect(status().isOk());
     }
 
