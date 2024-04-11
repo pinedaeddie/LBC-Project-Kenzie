@@ -72,7 +72,7 @@ public class OrderController {
 
     @DeleteMapping("/remove-item/{username}")
     public ResponseEntity<OrderRecord> removeItemFromOrder(@PathVariable("username") String userName, @RequestParam String item) {
-        orderService.removeItemFromOrder(userName, item);
-        return ResponseEntity.ok().build();
+        OrderRecord updatedOrder = orderService.removeItemFromOrder(userName, item);
+        return ResponseEntity.ok(updatedOrder);
     }
 }

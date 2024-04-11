@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>GroceryBros</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -14,11 +15,9 @@
 <body>
 
 <header class="header" id="header">
-    <nav class="nav">
-        <div class="site-title">
-            <a class="header_home" href="index.html"><i class="fa fa-fw fa-home"></i> HOME</a>
-            <a href="main.html"><i class="fa fa-shopping-cart"></i> CART</a>
-        </div>
+    <nav class="navbar">
+        <a class="header_home" href="index.html"><i class="fa fa-fw fa-home"></i> HOME</a>
+        <a href="main.html"><i class="fa fa-shopping-cart"></i> CART</a>
     </nav>
 </header>
 
@@ -26,13 +25,17 @@
     <div class="content">
         <form class="card-content" id="start-order">
             <h2>Create User Name</h2>
-            <h3>Please Enter a Unique User Name</h3>
+            <p>Please Enter An Unique User Name</p>
             <p class="form-field">
                 <input type="text" required class="validated-field" id="create-userName-field" placeholder="UserName">
             </p>
             <button type="submit">Create</button>
         </form>
     </div>
+</section>
+
+<section class="footer">
+    <div class="credit">Created By <span>GroceryBros</span> | All Rights Reserved</div>
 </section>
 
 </body>

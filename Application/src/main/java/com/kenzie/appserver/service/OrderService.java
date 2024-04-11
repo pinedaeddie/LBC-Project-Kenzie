@@ -1,6 +1,5 @@
 package com.kenzie.appserver.service;
 
-import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import com.kenzie.appserver.repositories.OrderRepository;
 import com.kenzie.appserver.repositories.model.OrderRecord;
 import com.kenzie.appserver.service.model.Order;
@@ -72,7 +71,7 @@ public class OrderService {
         return order;
     }
 
-    public void removeItemFromOrder(String username, String item) {
+    public OrderRecord removeItemFromOrder(String username, String item) {
         Optional<OrderRecord> recordOptional = orderRepository.findById(username);
         if (recordOptional.isPresent()) {
             OrderRecord orderRecord = recordOptional.get();
@@ -80,9 +79,13 @@ public class OrderService {
             itemList.removeIf(product -> product.equalsIgnoreCase(item));
             orderRecord.setItems(itemList);
             orderRepository.save(orderRecord);
-
+            return orderRecord; // Return the updated OrderRecord
         } else {
             throw new UnsupportedOperationException("Order record not found: " + username);
         }
+    }
+
+    public void save(OrderRecord orderRecord) {
+        orderRepository.save(orderRecord);
     }
 }

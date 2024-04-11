@@ -29,16 +29,15 @@ class StartOrderPage extends BaseClass {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
 
-        const request = document.getElementById("create-userName-field").value;
+        let request = document.getElementById("create-userName-field").value;
 
         const orderStarted = await this.client.startOrder(request, this.errorCallback);
         this.dataStore.set("orderRecord", orderStarted);
 
         if (orderStarted) {
-            this.showMessage(`Order successfully started!`)
+            this.showMessage(`Order successfully started!`);
         } else {
-            this.showMessage(`User already exists. Please proceed!`)
-            this.errorHandler(`Error creating order. Please try again...`);
+            this.errorHandler("Error creating order. Please try again...");
         }
     }
 }

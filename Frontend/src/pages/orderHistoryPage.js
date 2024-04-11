@@ -38,13 +38,13 @@ class OrderHistoryPage extends BaseClass {
             let idHtml = `<h3> ID: </h3><p>${id}</p>`;
             let orderDateHtml = `<h3> Order Date: </h3><p>${orderDate}</p>`;
             let html = `<h3> Items: </h3>`;
-            for(let i = 0; i<items.length; i++){
+            for(let i = 0; i < items.length; i++){
                 html += `<p>${items[i]}</p>`;
             }
-            result.innerHTML = userNameHtml+idHtml+orderDateHtml+html;
+            result.innerHTML = userNameHtml + idHtml + orderDateHtml + html;
         } else if(listOfRecords){
             let list = "";
-            for(let i = 0; i<listOfRecords.length; i++){
+            for(let i = 0; i < listOfRecords.length; i++){
                 const id = listOfRecords[i].id;
                 const userName = listOfRecords[i].userName;
                 const orderDate = listOfRecords[i].orderDate;
@@ -53,12 +53,12 @@ class OrderHistoryPage extends BaseClass {
                 let idHtml = `<h3> ID: </h3><p>${id}</p>`;
                 let orderDateHtml = `<h3> Order Date: </h3><p>${orderDate}</p>`;
                 let html = `<h3> Items: </h3>`;
-                for(let i = 0; i<items.length; i++){
+                for(let i = 0; i < items.length; i++){
                     html += `<p>${items[i]}</p>`;
                 }
                 html += `<br>`;
 
-                list += userNameHtml+idHtml+orderDateHtml+html;
+                list += userNameHtml + idHtml + orderDateHtml + html;
             }
             result.innerHTML = list;
         } else {
@@ -67,20 +67,6 @@ class OrderHistoryPage extends BaseClass {
     }
 
     // Event Handlers --------------------------------------------------------------------------------------------------
-
-    async onFindAll (event) {
-        // Prevent the page from refreshing on form submit
-        event.preventDefault();
-
-        let orderList = await this.client.findAll();
-        this.dataStore.set("orderList", orderList);
-
-        if (result) {
-            this.showMessage(`Orders retrieved successfully!`)
-        } else {
-            this.errorHandler(`Error retrieving orders. Please try again...`);
-        }
-    }
 
     async onFindOrderByUserName (event) {
         // Prevent the page from refreshing on form submit
@@ -94,10 +80,25 @@ class OrderHistoryPage extends BaseClass {
                 this.dataStore.set("orderRecord", orderRecord);
                 this.showMessage(`Order found: ${orderRecord.id}`);
             } else {
-                throw new Error("Invalid input. Please provide a username.");
+                throw new Error("Invalid input. Please provide an username.");
             }
         } catch (error) {
             this.errorHandler("Error retrieving order. Please try again.");
+        }
+    }
+
+
+    async onFindAll (event) {
+        // Prevent the page from refreshing on form submit
+        event.preventDefault();
+
+        let orderList = await this.client.findAll();
+        this.dataStore.set("orderList", orderList);
+
+        if (result) {
+            this.showMessage(`Orders retrieved successfully!`);
+        } else {
+            this.errorHandler(`Error retrieving orders. Please try again...`);
         }
     }
 }
